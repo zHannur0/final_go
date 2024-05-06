@@ -1,25 +1,43 @@
 package api
 
 import (
+	"final_project/internal/api/auth"
+	"final_project/internal/api/basket"
+	"final_project/internal/api/menu"
+	"final_project/internal/api/order"
+	"final_project/internal/api/status"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 
-	setupPublicEndpoints(router)
-	setupPrivateEndpoints(router)
-	setupAuthEndpoints(router)
-	setupBasketRouters(router)
+	//status
+	status.PublicStatus(router)
+	status.PrivateStatus(router)
 
-	setupMenuEndpoints(router)
+	//auth
+	auth.Login(router)
+	auth.SignUp(router)
 
-	setupOrderEndpoints(router)
-	setupOrderRoutes(router)
-	SetupOrderDeleteRouter(router)
+	//basket
+	basket.GetAllBasket(router)
+	basket.DeleteFromBasket(router)
+	basket.AddToBasket(router)
 
-	//only admin routers
-	SetupOrderUpdateRouter(router)
+	// menu
+	menu.GetAllMenu(router)
+	menu.AddMenu(router)
+	menu.UpdateMenu(router)
+	menu.DeleteMenu(router)
 
+	order.AddOrder(router)
+	order.GetOrder(router)
+	order.DeleteOrder(router)
+	order.UpdateOrder(router) // With Admin Permission
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router
 }

@@ -1,4 +1,4 @@
-package api
+package menu
 
 import (
 	"final_project/initializers"
@@ -8,7 +8,21 @@ import (
 	"net/http"
 )
 
-func setupMenuEndpoints(router *gin.Engine) {
+func GetAllMenu(router *gin.Engine) {
+	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
+	{
+		menuRoutes.GET("/", func(c *gin.Context) {
+			var menuItems []models.Menu
+			if err := initializers.DB.Find(&menuItems).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve menu items"})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"menuItems": menuItems})
+		})
+	}
+}
+
+func AddMenu(router *gin.Engine) {
 	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
 	{
 		menuRoutes.POST("/", func(c *gin.Context) {
@@ -29,7 +43,12 @@ func setupMenuEndpoints(router *gin.Engine) {
 				return
 			}
 		})
+	}
+}
 
+func UpdateMenu(router *gin.Engine) {
+	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
+	{
 		menuRoutes.PATCH("/:itemId", func(c *gin.Context) {
 			role, _ := c.Get("role")
 			if role != "admin" {
@@ -57,7 +76,12 @@ func setupMenuEndpoints(router *gin.Engine) {
 
 			c.JSON(http.StatusOK, gin.H{"message": "Menu item updated successfully"})
 		})
+	}
+}
 
+func DeleteMenu(router *gin.Engine) {
+	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
+	{
 		menuRoutes.DELETE("/:itemId", func(c *gin.Context) {
 			role, _ := c.Get("role")
 			if role != "admin" {
@@ -70,15 +94,6 @@ func setupMenuEndpoints(router *gin.Engine) {
 				return
 			}
 			c.JSON(http.StatusOK, gin.H{"message": "Menu item deleted successfully"})
-		})
-
-		menuRoutes.GET("/", func(c *gin.Context) {
-			var menuItems []models.Menu
-			if err := initializers.DB.Find(&menuItems).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve menu items"})
-				return
-			}
-			c.JSON(http.StatusOK, gin.H{"menuItems": menuItems})
 		})
 	}
 }

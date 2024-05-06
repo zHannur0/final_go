@@ -1,4 +1,4 @@
-package api
+package status
 
 import (
 	"final_project/internal/utils"
@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-func setupPublicEndpoints(router *gin.Engine) {
+func PublicStatus(router *gin.Engine) {
 	router.GET("/public", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "welcome to public endpoint"})
 	})
 }
 
-func setupPrivateEndpoints(router *gin.Engine) {
+func PrivateStatus(router *gin.Engine) {
 	router.GET("/private", utils.AuthMiddleware(), func(c *gin.Context) {
 		role, _ := c.Get("role")
 

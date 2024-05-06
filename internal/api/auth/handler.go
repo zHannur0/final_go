@@ -1,4 +1,4 @@
-package api
+package auth
 
 import (
 	"final_project/initializers"
@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func setupAuthEndpoints(router *gin.Engine) {
+func Login(router *gin.Engine) {
 	router.POST("/login", func(c *gin.Context) {
 		var loginUser models.User
 		if err := c.BindJSON(&loginUser); err != nil {
@@ -32,6 +32,10 @@ func setupAuthEndpoints(router *gin.Engine) {
 		fmt.Println("Generated token:", token)
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
+}
+
+func SignUp(router *gin.Engine) {
+
 	router.POST("/signup", func(c *gin.Context) {
 		var newUser models.User
 		if err := c.BindJSON(&newUser); err != nil {

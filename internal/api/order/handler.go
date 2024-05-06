@@ -1,4 +1,4 @@
-package api
+package order
 
 import (
 	"final_project/initializers"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func setupOrderEndpoints(router *gin.Engine) {
+func AddOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
 		orders.POST("/", func(c *gin.Context) {
@@ -79,7 +79,7 @@ func setupOrderEndpoints(router *gin.Engine) {
 	}
 }
 
-func setupOrderRoutes(router *gin.Engine) {
+func GetOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
 		orders.GET("/", func(c *gin.Context) {
@@ -128,11 +128,7 @@ func setupOrderRoutes(router *gin.Engine) {
 	}
 }
 
-type UpdateOrderData struct {
-	Status string `json:"status" binding:"required"`
-}
-
-func SetupOrderUpdateRouter(router *gin.Engine) {
+func UpdateOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
 		orders.PATCH("/:OrderId", func(c *gin.Context) {
@@ -175,7 +171,8 @@ func SetupOrderUpdateRouter(router *gin.Engine) {
 		})
 	}
 }
-func SetupOrderDeleteRouter(router *gin.Engine) {
+
+func DeleteOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
 		orders.DELETE("/:OrderID/", func(c *gin.Context) {
@@ -202,6 +199,10 @@ func SetupOrderDeleteRouter(router *gin.Engine) {
 			c.JSON(http.StatusOK, gin.H{"message": "Order deleted successfully"})
 		})
 	}
+}
+
+type UpdateOrderData struct {
+	Status string `json:"status" binding:"required"`
 }
 
 type OrderRequest struct {
