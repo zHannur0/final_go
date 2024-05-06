@@ -2,7 +2,7 @@ package main
 
 import (
 	"final_project/initializers"
-	"final_project/internal/router"
+	"final_project/internal/api"
 )
 
 func init() {
@@ -12,7 +12,7 @@ func init() {
 
 func main() {
 
-	router := router.SetupRouter()
+	router := api.SetupRouter()
 	router.Run(":8080")
 
 }
