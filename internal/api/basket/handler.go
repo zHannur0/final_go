@@ -11,6 +11,18 @@ import (
 	"net/http"
 )
 
+// DeleteFromBasket godoc
+// @Summary Delete user's basket
+// @Description Deletes all items in the user's basket and the basket itself.
+// @Tags basket
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} map[string]interface{} "message: Basket deleted successfully"
+// @Failure 400 {object} map[string]interface{} "error: User ID not found"
+// @Failure 404 {object} map[string]interface{} "message: Basket not found"
+// @Failure 500 {object} map[string]interface{} "error: Failed to delete basket or basket items"
+// @Router /basket [delete]
 func DeleteFromBasket(router *gin.Engine) {
 	basketRoutes := router.Group("/basket", utils.AuthMiddleware())
 	{
@@ -51,6 +63,18 @@ func DeleteFromBasket(router *gin.Engine) {
 	}
 }
 
+// AddToBasket godoc
+// @Summary Add items to basket
+// @Description Adds one or more items to the user's basket.
+// @Tags basket
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param items body struct { Items []struct { ItemID uint "json:\"item_id\""; Quantity int "json:\"quantity\"" } "json:\"items\"" } true "Items to add"
+// @Success 200 {object} map[string]interface{} "message: Items added to basket successfully, basketId"
+// @Failure 400 {object} map[string]interface{} "error: User ID not found or Invalid JSON body"
+// @Failure 500 {object} map[string]interface{} "error: Failed to retrieve or create basket or add item to basket"
+// @Router /basket [post]
 func AddToBasket(router *gin.Engine) {
 	basketRoutes := router.Group("/basket", utils.AuthMiddleware())
 	{
@@ -101,6 +125,18 @@ func AddToBasket(router *gin.Engine) {
 	}
 }
 
+// GetAllBasket godoc
+// @Summary Retrieve user's basket
+// @Description Retrieves all items currently in the user's basket along with total price.
+// @Tags basket
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} struct { BasketID uint "json:\"basket_id\""; Items []map[string]interface{} "json:\"items\""; TotalPrice string "json:\"total_price\"" } "Basket contents and total price"
+// @Failure 400 {object} map[string]interface{} "error: User ID not found"
+// @Failure 404 {object} map[string]interface{} "message: Basket not found"
+// @Failure 500 {object} map[string]interface{} "error: Failed to retrieve basket"
+// @Router /basket [get]
 func GetAllBasket(router *gin.Engine) {
 	basketRoutes := router.Group("/basket", utils.AuthMiddleware())
 	{

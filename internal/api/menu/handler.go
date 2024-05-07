@@ -8,6 +8,16 @@ import (
 	"net/http"
 )
 
+// GetAllMenu godoc
+// @Summary Get all menu items
+// @Description Retrieves all available menu items from the database.
+// @Tags menu
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} struct { MenuItems []models.Menu } "A list of all menu items"
+// @Failure 500 {object} map[string]interface{} "error: Failed to retrieve menu items"
+// @Router /menu [get]
 func GetAllMenu(router *gin.Engine) {
 	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
 	{
@@ -22,6 +32,19 @@ func GetAllMenu(router *gin.Engine) {
 	}
 }
 
+// AddMenu godoc
+// @Summary Add a new menu item
+// @Description Adds a new menu item to the database, accessible only by admin users.
+// @Tags menu
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param menuItem body models.Menu true "Menu Item to be added"
+// @Success 201 {object} map[string]interface{} "message: Menu item added successfully, menuItemId"
+// @Failure 400 {object} map[string]interface{} "error: Invalid request"
+// @Failure 403 {object} map[string]interface{} "error: Insufficient permissions"
+// @Failure 500 {object} map[string]interface{} "error: Failed to add menu item"
+// @Router /menu [post]
 func AddMenu(router *gin.Engine) {
 	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
 	{
@@ -46,6 +69,21 @@ func AddMenu(router *gin.Engine) {
 	}
 }
 
+// UpdateMenu godoc
+// @Summary Update a menu item
+// @Description Updates details of a specific menu item, accessible only by admin users.
+// @Tags menu
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param itemId path string true "ID of the Menu Item to update"
+// @Param updates body map[string]interface{} true "JSON object containing the updates"
+// @Success 200 {object} map[string]interface{} "message: Menu item updated successfully"
+// @Failure 400 {object} map[string]interface{} "error: Invalid request, details"
+// @Failure 403 {object} map[string]interface{} "error: Insufficient permissions"
+// @Failure 404 {object} map[string]interface{} "error: Menu item not found"
+// @Failure 500 {object} map[string]interface{} "error: Failed to update menu item, details"
+// @Router /menu/{itemId} [patch]
 func UpdateMenu(router *gin.Engine) {
 	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
 	{
@@ -79,6 +117,18 @@ func UpdateMenu(router *gin.Engine) {
 	}
 }
 
+// DeleteMenu godoc
+// @Summary Delete a menu item
+// @Description Deletes a specific menu item from the database, accessible only by admin users.
+// @Tags menu
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param itemId path string true "ID of the Menu Item to delete"
+// @Success 200 {object} map[string]interface{} "message: Menu item deleted successfully"
+// @Failure 403 {object} map[string]interface{} "error: Insufficient permissions"
+// @Failure 500 {object} map[string]interface{} "error: Failed to delete menu item"
+// @Router /menu/{itemId} [delete]
 func DeleteMenu(router *gin.Engine) {
 	menuRoutes := router.Group("/menu", utils.AuthMiddleware())
 	{

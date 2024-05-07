@@ -10,6 +10,17 @@ import (
 	"time"
 )
 
+// @Summary Add a new order
+// @Description Creates a new order with specified items.
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param order body OrderRequest true "Order details"
+// @Success 201 {object} models.Order "Order created"
+// @Failure 400 {object} map[string]interface{} "error: Invalid request or Product not found or Not enough stock"
+// @Failure 500 {object} map[string]interface{} "error: Failed to create order"
+// @Router /orders [post]
 func AddOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
@@ -79,6 +90,16 @@ func AddOrder(router *gin.Engine) {
 	}
 }
 
+// @Summary Get user orders
+// @Description Retrieves all orders placed by the user.
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {array} map[string]interface{} "List of user orders"
+// @Failure 400 {object} map[string]interface{} "error: User ID not found"
+// @Failure 500 {object} map[string]interface{} "error: Failed to retrieve orders"
+// @Router /orders [get]
 func GetOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
@@ -128,6 +149,20 @@ func GetOrder(router *gin.Engine) {
 	}
 }
 
+// @Summary Update an order status
+// @Description Updates the status of an order, accessible only by admin users.
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param OrderId path string true "Order ID"
+// @Param status body UpdateOrderData true "New status data"
+// @Success 200 {object} map[string]interface{} "message: Order status updated successfully"
+// @Failure 400 {object} map[string]interface{} "error: Invalid request or Invalid order status"
+// @Failure 403 {object} map[string]interface{} "error: Only admin can update order status"
+// @Failure 404 {object} map[string]interface{} "error: Order not found"
+// @Failure 500 {object} map[string]interface{} "error: Failed to update order status"
+// @Router /orders/{OrderId} [patch]
 func UpdateOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{
@@ -172,6 +207,19 @@ func UpdateOrder(router *gin.Engine) {
 	}
 }
 
+// @Summary Delete an order
+// @Description Deletes an order with the specified ID, only if the order status is 'Preparing'.
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param OrderID path string true "Order ID to delete"
+// @Success 200 {object} map[string]interface{} "message: Order deleted successfully"
+// @Failure 401 {object} map[string]interface{} "error: User ID not found"
+// @Failure 403 {object} map[string]interface{} "error: You can only delete orders with 'preparing' status"
+// @Failure 404 {object} map[string]interface{} "error: Order not found or you don't have permission to delete it"
+// @Failure 500 {object} map[string]interface{} "error: Failed to delete order"
+// @Router /orders/{OrderID} [delete]
 func DeleteOrder(router *gin.Engine) {
 	orders := router.Group("/orders", utils.AuthMiddleware())
 	{

@@ -1,6 +1,7 @@
 package api
 
 import (
+	_ "final_project/docs"
 	"final_project/internal/api/auth"
 	"final_project/internal/api/basket"
 	"final_project/internal/api/menu"
@@ -39,5 +40,6 @@ func SetupRouter() *gin.Engine {
 	order.UpdateOrder(router) // With Admin Permission
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	return router
 }
