@@ -37,7 +37,7 @@ func SetupRouter() *gin.Engine {
 	order.AddOrder(router)
 	order.GetOrder(router)
 	order.DeleteOrder(router)
-	order.UpdateOrder(router) // With Admin Permission
+	order.UpdateOrder(router)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

@@ -2,9 +2,9 @@ package models
 
 import (
 	"errors"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"time"
-	"github.com/shopspring/decimal"
 )
 
 type Role string
@@ -33,7 +33,7 @@ type User struct {
 	Baskets  []Basket `gorm:"foreignKey:UserID"`
 }
 type Order struct {
-	ID           uint   `gorm:"primaryKey"`
+	ID           uint `gorm:"primaryKey"`
 	UserID       uint
 	OrderStatus  Status `gorm:"type:varchar(255)"`
 	CreatedAt    time.Time
@@ -52,23 +52,23 @@ type OrderDetail struct {
 	MenuItem  Menu  `gorm:"foreignKey:ItemID"`
 }
 type Basket struct {
-    ID          uint `gorm:"primaryKey"`
-    UserID      uint
-    CreatedAt   time.Time
-    UpdatedAt   time.Time
-    TotalPrice  decimal.Decimal
-    User        User         `gorm:"foreignKey:UserID"`
-    BasketItems []BasketItem `gorm:"foreignKey:BasketID"`
+	ID          uint `gorm:"primaryKey"`
+	UserID      uint
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	TotalPrice  decimal.Decimal
+	User        User         `gorm:"foreignKey:UserID"`
+	BasketItems []BasketItem `gorm:"foreignKey:BasketID"`
 }
 
 type BasketItem struct {
-    ID       uint `gorm:"primaryKey"`
-    BasketID uint
-    ItemID   uint
-    Quantity int
-    Price    decimal.Decimal
-    Basket   Basket `gorm:"foreignKey:BasketID"`
-    MenuItem Menu   `gorm:"foreignKey:ItemID"`
+	ID       uint `gorm:"primaryKey"`
+	BasketID uint
+	ItemID   uint
+	Quantity int
+	Price    decimal.Decimal
+	Basket   Basket `gorm:"foreignKey:BasketID"`
+	MenuItem Menu   `gorm:"foreignKey:ItemID"`
 }
 type Menu struct {
 	ID           uint `gorm:"primaryKey"`
@@ -89,6 +89,7 @@ func (o *Order) BeforeSave(tx *gorm.DB) (err error) {
 		return errors.New("invalid order status")
 	}
 }
+
 func (u *User) BeforeSave(tx *gorm.DB) (err error) {
 	switch u.Role {
 	case Admin, Client:

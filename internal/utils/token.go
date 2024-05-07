@@ -16,14 +16,12 @@ import (
 var jwtKey = []byte(os.Getenv("my_secret"))
 
 func GenerateToken(username string, role string, ID int) (string, error) {
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
 		"role":     role,
 		"ID":       ID,
 		"exp":      time.Now().Add(time.Hour * 1).Unix(),
 	})
-
 	return token.SignedString(jwtKey)
 }
 
@@ -57,7 +55,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userID, ok := claims["ID"].(float64) // JWT numeric values are float64
+		userID, ok := claims["ID"].(float64)
 		if !ok {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found in token"})
 			c.Abort()
@@ -78,7 +76,6 @@ func AuthMiddleware() gin.HandlerFunc {
 }
 
 func SignupUser(db *gorm.DB, newUser models.User) error {
-
 	var existingUser models.User
 	result := db.Where("username = ?", newUser.Username).First(&existingUser)
 	if result.Error == nil {
@@ -92,6 +89,5 @@ func SignupUser(db *gorm.DB, newUser models.User) error {
 	if err := db.Create(&newUser).Error; err != nil {
 		return fmt.Errorf("Failed to create user")
 	}
-
 	return nil
 }
